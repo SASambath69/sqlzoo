@@ -113,24 +113,22 @@ ORDER BY (
 
 /* 10. Find the routes involving two buses that can go from Craiglockhart to Lochend. */
 
-SELECT S.num, S.company, S.name, T.num, T.company
+SELECT A.num, A.company, A.name, B.num, B.company
 FROM (
 	SELECT DISTINCT a.num, a.company, sb.name
-    FROM route a
-    JOIN route b ON
-    	(a.num = b.num AND a.company = b.company)
-    JOIN stops sa ON sa.id = a.stop
+	FROM route a
+	JOIN route b
+	ON (a.num = b.num AND a.company = b.company)
+	JOIN stops sa ON sa.id = a.stop
 	JOIN stops sb ON sb.id = b.stop
-    WHERE sa.name = 'Craiglockhart' AND sb.name <> 'Craiglockhart'
-) S
+	WHERE sa.name = 'Craiglockhart' AND sb.name <> 'Craiglockhart') A
 JOIN (
 	SELECT x.num, x.company, sy.name
-    FROM route x
-    JOIN route y ON
-    	(x.num = y.num and x.company = y.company)
-    JOIN stops sx ON sx.id = x.stop
-    JOIN stops sy ON sy.id = y.stop
-    WHERE sx.name = 'Lochend' AND sy.name <> 'Lochend'
-    ) T
-ON (S.name = T.name)
-ORDER BY S.num, S.name, T.num
+	FROM route x
+	JOIN route y
+	ON (x.num = y.num and x.company = y.company)
+	JOIN stops sx ON sx.id = x.stop
+	JOIN stops sy ON sy.id = y.stop
+	WHERE sx.name = 'Lochend' AND sy.name <> 'Lochend') B
+ON A.name = B.name
+ORDER BY A.num, A.name, B.num
