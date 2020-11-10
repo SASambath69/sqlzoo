@@ -72,7 +72,7 @@ ON t.album = a.asin
 GROUP BY t.song
 HAVING COUNT(DISTINCT(a.title)) > 2
 
--- Wrong answer. Will be updated soon
+-- Wrong answer for sqlzoo
 
 
 /* 9. A "good value" album is one where the price per track is less than 50 pence.
