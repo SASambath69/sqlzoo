@@ -19,7 +19,7 @@ JOIN route r
 ON s.id = r.stop
 WHERE r.num = 4 AND r.company = 'LRT'
 
--- Wrong answer. Will be updated soon
+-- Wrong answer for sqlzoo
 
 
 /* 4. The query shown gives the number of routes that visit either London Road (149) or Craiglockhart (53).
@@ -108,7 +108,7 @@ ORDER BY (
 	END
 	)
 
--- Wrong answer. Will be updated soon
+-- Wrong answer for sqlzoo
 
 
 /* 10. Find the routes involving two buses that can go from Craiglockhart to Lochend. */
