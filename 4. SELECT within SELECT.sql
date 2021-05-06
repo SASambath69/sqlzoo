@@ -81,3 +81,10 @@ SELECT continent, min(name) AS name
 FROM world
 GROUP BY continent
 ORDER BY continent
+
+-- ou aussi :
+
+SELECT continent, name
+FROM (SELECT continent, name, RANK() OVER(PARTITION BY continent ORDER BY name) AS position
+      FROM world) AS world
+WHERE position = 1
