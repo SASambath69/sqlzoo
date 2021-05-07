@@ -88,3 +88,18 @@ SELECT continent, name
 FROM (SELECT continent, name, RANK() OVER(PARTITION BY continent ORDER BY name) AS position
       FROM world) AS world
 WHERE position = 1
+
+/* 9 Find the continents where all countries have a population <= 25000000. Then find the names of the countries associated with these continents. Show name, continent and population. */
+
+SELECT name, continent, population
+FROM world
+WHERE continent IN (SELECT continent
+		    FROM (SELECT DISTINCT(continent),
+			  	CASE WHEN COUNT(continent) = SUM(ok) THEN 1
+			  	ELSE 0 END AS correspond
+			  FROM (SELECT continent, name,
+					CASE WHEN population <= 25000000 THEN 1
+					ELSE 0 END AS ok
+				FROM world) AS w
+			  GROUP BY continent) AS x
+WHERE correspond = 1)
