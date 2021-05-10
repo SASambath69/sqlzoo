@@ -90,7 +90,7 @@ FROM (SELECT continent, name, RANK() OVER(PARTITION BY continent ORDER BY name) 
 WHERE position = 1
 
 
-/* 9 Find the continents where all countries have a population <= 25000000. Then find the names of the countries associated with these continents.
+/* 9. Find the continents where all countries have a population <= 25000000. Then find the names of the countries associated with these continents.
 Show name, continent and population. */
 
 SELECT name, continent, population
@@ -105,3 +105,24 @@ WHERE continent IN (SELECT continent
 				FROM world) AS w
 			  GROUP BY continent) AS x
 WHERE correspond = 1)
+
+
+/* 10. Some countries have populations more than three times that of any of their neighbours (in the same continent). Give the countries and continents. */
+
+SELECT name, continent
+FROM world
+WHERE population IN (SELECT max(population) AS population_max
+		     FROM world
+		     GROUP BY continent
+		     HAVING continent IN (SELECT continent
+					  FROM (SELECT w.continent, name, population, population_max,
+							CASE WHEN population_max > 3 * population THEN 1
+							ELSE 0 END as goal
+						FROM world w
+						JOIN (SELECT continent, MAX(population) AS population_max
+						      FROM world
+						      GROUP BY continent) AS x
+						IN w.continent = x.continent) z
+					  GROUP BY continent
+					  HAVING (CASE WHEN COUNT(goal) = SUM(goal) + 1 THEN 1
+						  ELSE 0 END) = 1))
